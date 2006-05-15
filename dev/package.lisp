@@ -1,7 +1,8 @@
 (in-package common-lisp-user)
 
-(defpackage "METASHELL"
-  (:use "COMMON-LISP")
+(defpackage #:trivial-shell
+  (:use #:common-lisp)
+  (:nicknames #:metashell)
   (:export 
    #:shell-command))
 

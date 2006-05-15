@@ -81,78 +81,38 @@ returns (VALUES output error-output exit-status)"
   (error "shell-command not implemented for this Lisp")
   )
 
-;;; ---------------------------------------------------------------------------
-
-#+Ignore
-(defun shell-command (command &key (timeout most-positive-fixnum))
-  "Synchronously execute command using a Bourne-compatible shell, 
-returns the result of the command. If timeout is non-nil, it is used..."
-  (declare (ignorable timeout))
-  #+sbcl
-  (let* ((process (sb-ext:run-program  
-		   "/bin/sh"
-		   (list "-c" command)
-		   :input nil
-		   :output nil 
-		   :error nil)))
-    (values
-     (sb-impl::process-exit-code process)))    
-  
-  #+(or cmu scl)
-  (let* ((process (ext:run-program  
-		   "/bin/sh"
-		   (list "-c" command)
-		   :input nil :output nil :error nil)))
-    (values
-     (ext::process-exit-code process)))
-  
-  #+allegro
-  (sys:with-timeout (timeout 
-		     (progn
-		       (error 'timeout-error :command command)))
-    (multiple-value-bind (output error status)
-	                 (excl.osi:command-output command :whole t)
-      (values status)))
-  
-  #+lispworks
-  (let ((status 
-         (system:call-system-showing-output
-          command
-          :prefix ""
-          :show-cmd nil
-          :output-stream output)))
-    (values status))
-  
-  #+clisp		
-  (values
-   (ext:run-shell-command  command :output :terminal :wait t))
-  
-  #+openmcl
-  (let ((process (ccl:run-program  
-		  "/bin/sh"
-		  (list "-c" command)
-		  :input nil 
-		  :output nil
-		  :error nil
-		  :wait nil))
-	(status nil)
-	(exit-code nil))
-    (ccl:process-wait-with-timeout
-     "WAITING"
-     (* ccl:*ticks-per-second* timeout)
-     (lambda ()
-       (setf (values status exit-code) 
-	     (ccl:external-process-status process))
-       (not (eq status :running))))
-    (if (eq status :running)
-	(progn
-	  (error 'timeout-error :command command))
-	(values exit-code)))
-  
-  
-  #-(or openmcl clisp lispworks allegro scl cmu sbcl)
-  (error " not implemented for this Lisp")
-  )
 
 
 
+
+#|
+
+(sys:with-timeout (timeout 
+                   (progn
+                     (error 'timeout-error :command command)))
+  (multiple-value-bind (output error status)
+                       (excl.osi:command-output command :whole t)
+    (values status)))
+
+#+openmcl
+(let ((process (ccl:run-program  
+                "/bin/sh"
+                (list "-c" command)
+                :input nil 
+                :output nil
+                :error nil
+                :wait nil))
+      (status nil)
+      (exit-code nil))
+  (ccl:process-wait-with-timeout
+   "WAITING"
+   (* ccl:*ticks-per-second* timeout)
+   (lambda ()
+     (setf (values status exit-code) 
+           (ccl:external-process-status process))
+     (not (eq status :running))))
+  (if (eq status :running)
+    (progn
+      (error 'timeout-error :command command))
+    (values exit-code)))
+|#
