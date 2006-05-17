@@ -2,7 +2,8 @@
 
 Author: Gary King
 
-Code forked from Kevin Rosenberg's KMRCL 
+Code forked from Kevin Rosenberg's KMRCL and borrowed from Alexander Repenning's 
+Apple event code.
 |#
 
 (defpackage :trivial-shell-system (:use #:cl #:asdf))
@@ -21,9 +22,7 @@ Code forked from Kevin Rosenberg's KMRCL
                                      (:file "definitions"
                                             :depends-on ("package"))
                                      (:file "shell"
-                                            :depends-on ("definitions"))
-                                     
-                                     (:static-file "notes.text")
+                                            :depends-on ("definitions" #+digitool "mcl"))
                                      
                                      #+DIGITOOL
                                      (:module "mcl"
