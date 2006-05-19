@@ -24,12 +24,32 @@ Apple event code.
                                      (:file "shell"
                                             :depends-on ("definitions" #+digitool "mcl"))
                                      
-                                     #+DIGITOOL
+                                     #+allegro
+                                     (:file "allegro" :depends-on ("shell"))
+                                     #+clisp
+                                     (:file "clisp" :depends-on ("shell"))
+                                     #+cmucl
+                                     (:file "cmucl" :depends-on ("shell"))
+                                     #+digitool
+                                     (:file "digitool" :depends-on ("shell"))
+                                     #+lispworks
+                                     (:file "lispworks" :depends-on ("shell"))
+                                     #+openmcl
+                                     (:file "openmcl" :depends-on ("shell"))
+                                     #+sbcl
+                                     (:file "sbcl" :depends-on ("shell"))
+
+                                     #-(or allegro clisp cmucl digitool lispworks openmcl sbcl)
+                                     (:file "unsupported")
+                                     
+                                     #+digitool
                                      (:module "mcl"
                                               :components ((:file "eval-apple-script")))))
                
                (:module "website"
                         :components ((:module "source"
                                               :components ((:static-file "index.lml"))))))
+  :in-order-to ((test-op (test-op trivial-shell-test)))
+
   :depends-on ())
 

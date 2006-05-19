@@ -2,84 +2,46 @@
 
 (in-package #:metashell)
 
-(defun shell-command (command)
-  "Synchronously execute the result using a Bourne-compatible shell,
-returns (VALUES output error-output exit-status)"
-  #+sbcl
-  (let* ((process (sb-ext:run-program
-                   *shell-path*
-                   (list "-c" command)
-                   :input nil :output :stream :error :stream))
-         (output (read-stream-to-string (sb-impl::process-output process)))
-         (error (read-stream-to-string (sb-impl::process-error process))))
-    (close (sb-impl::process-output process))
-    (close (sb-impl::process-error process))
-    (values
-     output
-     error
-     (sb-impl::process-exit-code process)))
-  
-  
-  #+(or cmu scl)
-  (let* ((process (ext:run-program
-                   *shell-path*
-                   (list "-c" command)
-                   :input nil :output :stream :error :stream))
-         (output (read-stream-to-string (ext::process-output process)))
-         (error (read-stream-to-string (ext::process-error process))))
-    (close (ext::process-output process))
-    (close (ext::process-error process))
-    
-    (values
-     output
-     error
-     (ext::process-exit-code process)))
-  
-  #+allegro
-  (multiple-value-bind (output error status)
-	               (excl.osi:command-output command :whole t)
-    (values output error status))
-  
-  #+lispworks
-  ;; BUG: Lispworks combines output and error streams
-  (let ((output (make-string-output-stream)))
-    (unwind-protect
-      (let ((status
-             (system:call-system-showing-output
-              command
-              :prefix ""
-              :show-cmd nil
-              :output-stream output)))
-        (values (get-output-stream-string output) nil status))
-      (close output)))
-  
-  #+clisp
-  ;; BUG: CLisp doesn't allow output to user-specified stream
-  (values
-   nil
-   nil
-   (ext:run-shell-command  command :output :terminal :wait t))
-  
-  #+openmcl
-  (let* ((process (ccl:run-program
-                   *shell-path*
-                   (list "-c" command)
-                   :input nil :output :stream :error :stream
-                   :wait t))
-         (output (read-stream-to-string (ccl::external-process-output-stream process)))
-         (error (read-stream-to-string (ccl::external-process-error-stream process))))
-    (close (ccl::external-process-output-stream process))
-    (close (ccl::external-process-error-stream process))
-    (values output
-            error
-            (nth-value 1 (ccl::external-process-status process))))
-  
-  #+digitool
-  (ccl:do-shell-script command)
-  
-  #-(or openmcl clisp lispworks allegro scl cmu sbcl digitool)
-  (error "shell-command not implemented for this Lisp")
-  )
+(defgeneric file-to-string-as-lines (pathname)
+  (:documentation ""))
+
+(define-condition timeout-error (error)
+                  ((command :initarg
+                            :command :initform nil 
+                            :reader timeout-error-command))
+  (:report (lambda (c s)
+	     (format s "Process timeout: command ~A" 
+		     (timeout-error-command c)))))
+
+(setf (documentation 'shell-command 'function)
+      "Synchronously execute the result using a Bourne-compatible shell,
+returns (values output error-output exit-status).")
+
+(defmethod file-to-string-as-lines ((pathname pathname))
+  (with-open-file (stream pathname :direction :input)
+    (file-to-string-as-lines stream)))
+
+(defmethod file-to-string-as-lines ((stream stream))
+  (with-output-to-string (s)
+    (loop for line = (read-line stream nil :eof nil) 
+	 until (eq line :eof) do
+	 (princ line s)
+	 (terpri s))))
+
+(defun shell-command-with-timeout (command timeout on-timeout)
+  (let ((process (create-shell-process command nil))
+        (exit-code nil)
+        (status nil))
+    (process-wait-with-timeout
+     "WAITING"
+     (* *ticks-per-second* timeout)
+     (lambda ()
+       (setf (values status exit-code) (process-alive-p process))
+       (values (not status))))
+    (if status
+      (funcall on-timeout)
+      (values exit-code))))
+
 
 
 
