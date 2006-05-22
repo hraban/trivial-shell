@@ -5,7 +5,8 @@
   (:nicknames #:metashell)
   (:export 
    #:shell-command
-   
+   #:with-timeout
+
    ;; conditions
    #:timeout-error
    #:timeout-error-command))
@@ -24,11 +25,6 @@
    '()
    #+digitool-mcl
    '(ccl:process-wait-with-timeout)
-   #+(and ecl threads)
-   '(mp:all-processes
-     mp:process-name)
-   #+(and ecl (not threads))
-   '()
    #+lispworks
    '(mp:process-wait-with-timeout)
    #+openmcl

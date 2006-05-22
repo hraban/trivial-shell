@@ -6,12 +6,42 @@
   (:documentation ""))
 
 (define-condition timeout-error (error)
-                  ((command :initarg
-                            :command :initform nil 
-                            :reader timeout-error-command))
+                  ()
   (:report (lambda (c s)
-	     (format s "Process timeout: command ~A" 
-		     (timeout-error-command c)))))
+	     (declare (ignore c))
+	     (format s "Process timeout"))))
+
+(defmacro with-timeout ((seconds) &body body)
+  #+allegro
+  `(progn
+     (mp:with-timeout (,seconds) ,@body))
+  #+cmu
+  `(mp:with-timeout (,seconds) ,@body)
+  #+sb-thread
+  `(handler-case 
+       (sb-ext:with-timeout ,seconds ,@body)
+     (sb!ext::timeout (c)
+       (cerror "Timeout" 'timeout-error)))
+  #+openmcl
+  (let ((checker-process (format nil "Checker ~S" (gensym)))
+        (waiting-process (format nil "Waiter ~S" (gensym)))
+	(result (gensym)))
+    `(let* ((,result nil)
+	    (p (ccl:process-run-function 
+		,checker-process
+		(lambda ()
+		  (setf ,result ,@body))))) 
+       (ccl:process-wait-with-timeout
+        ,waiting-process
+        (* ,seconds ccl:*ticks-per-second*)
+        (lambda ()
+          (not (ccl::process-active-p p)))) 
+       (when (ccl::process-active-p p)
+	 (ccl:process-kill p)
+	 (cerror "Timeout" 'timeout-error))
+       (values ,result)))
+  #-(or allegro cmu sb-thread openmcl)
+  `(progn ,@body))
 
 (setf (documentation 'shell-command 'function)
       "Synchronously execute the result using a Bourne-compatible shell,
@@ -27,25 +57,6 @@ returns (values output error-output exit-status).")
 	 until (eq line :eof) do
 	 (princ line s)
 	 (terpri s))))
-
-(defun shell-command-with-timeout (command timeout on-timeout)
-  (let ((process (create-shell-process command nil))
-        (exit-code nil)
-        (status nil))
-    (process-wait-with-timeout
-     "WAITING"
-     (* *ticks-per-second* timeout)
-     (lambda ()
-       (setf (values status exit-code) (process-alive-p process))
-       (values (not status))))
-    (if status
-      (funcall on-timeout)
-      (values exit-code))))
-
-
-
-
-
 
 #|
 
