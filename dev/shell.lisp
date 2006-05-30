@@ -22,7 +22,7 @@
        (sb-ext:with-timeout ,seconds ,@body)
      (sb!ext::timeout (c)
        (cerror "Timeout" 'timeout-error)))
-  #+openmcl
+  #+(or digitool openmcl)
   (let ((checker-process (format nil "Checker ~S" (gensym)))
         (waiting-process (format nil "Waiter ~S" (gensym)))
 	(result (gensym)))
@@ -33,14 +33,14 @@
 		  (setf ,result ,@body))))) 
        (ccl:process-wait-with-timeout
         ,waiting-process
-        (* ,seconds ccl:*ticks-per-second*)
+        (* ,seconds #+openmcl ccl:*ticks-per-second* #+digitool 60)
         (lambda ()
           (not (ccl::process-active-p p)))) 
        (when (ccl::process-active-p p)
 	 (ccl:process-kill p)
 	 (cerror "Timeout" 'timeout-error))
        (values ,result)))
-  #-(or allegro cmu sb-thread openmcl)
+  #-(or allegro cmu sb-thread openmcl digitool)
   `(progn ,@body))
 
 (setf (documentation 'shell-command 'function)
