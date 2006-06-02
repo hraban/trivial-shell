@@ -25,19 +25,20 @@
   #+(or digitool openmcl)
   (let ((checker-process (format nil "Checker ~S" (gensym)))
         (waiting-process (format nil "Waiter ~S" (gensym)))
-	(result (gensym)))
+	(result (gensym))
+	(process (gensym)))
     `(let* ((,result nil)
-	    (p (ccl:process-run-function 
+	    (,process (ccl:process-run-function 
 		,checker-process
 		(lambda ()
-		  (setf ,result ,@body))))) 
+		  (setf ,result (progn ,@body)))))) 
        (ccl:process-wait-with-timeout
         ,waiting-process
         (* ,seconds #+openmcl ccl:*ticks-per-second* #+digitool 60)
         (lambda ()
-          (not (ccl::process-active-p p)))) 
-       (when (ccl::process-active-p p)
-	 (ccl:process-kill p)
+          (not (ccl::process-active-p ,process)))) 
+       (when (ccl::process-active-p ,process)
+	 (ccl:process-kill ,process)
 	 (cerror "Timeout" 'timeout-error))
        (values ,result)))
   #-(or allegro cmu sb-thread openmcl digitool)

@@ -12,6 +12,14 @@
             error
             (process-exit-code process))))
 
+#+No
+(defun create-shell-process (command wait)
+  (ccl:run-program
+   *shell-path*
+   (list "-c" (format nil "\"~A\"" command))
+   :input nil :output :stream :error :stream
+   :wait wait))
+
 (defun create-shell-process (command wait)
   (ccl:run-program
    *shell-path*
