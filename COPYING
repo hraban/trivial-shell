@@ -24,3 +24,11 @@ Portions are also under copyright by the following:
 ;* Author       : Alexander Repenning                             *
 ;* Copyright    : 2003 (c) AgentSheets Inc.                       *
 ;*                http://www.agentsheets.com                      *
+
+Portions are also under copyright by the following:
+
+;;;; This file, part of KMRCL, is Copyright (c) 2002 by Kevin M. Rosenberg
+;;;;
+;;;; KMRCL users are granted the rights to distribute and use this software
+;;;; as governed by the terms of the Lisp Lesser GNU Public License
+;;;; (http://opensource.franz.com/preamble.html), also known as the LLGPL.
