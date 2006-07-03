@@ -34,4 +34,4 @@
      sb-threads:signal-semaphore)
    #+(and sbcl (not sb-threads))
    '()
-   (find-package '#:trivial-shell)))
+   '#:trivial-shell))
