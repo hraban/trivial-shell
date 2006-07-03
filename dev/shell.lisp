@@ -20,7 +20,7 @@
   #+sb-thread
   `(handler-case 
        (sb-ext:with-timeout ,seconds ,@body)
-     (sb!ext::timeout (c)
+     (sb-ext::timeout (c)
        (cerror "Timeout" 'timeout-error)))
   #+(or digitool openmcl)
   (let ((checker-process (format nil "Checker ~S" (gensym)))

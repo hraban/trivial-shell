@@ -23,7 +23,7 @@
    '()
    #+cormanlisp
    '()
-   #+digitool-mcl
+   #+digitool
    '(ccl:process-wait-with-timeout)
    #+lispworks
    '(mp:process-wait-with-timeout)
