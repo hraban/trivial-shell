@@ -28,7 +28,7 @@ Apple event code.
                                      (:file "allegro" :depends-on ("shell"))
                                      #+clisp
                                      (:file "clisp" :depends-on ("shell"))
-                                     #+cmucl
+                                     #+cmu
                                      (:file "cmucl" :depends-on ("shell"))
                                      #+digitool
                                      (:file "digitool" :depends-on ("shell"))
@@ -39,7 +39,7 @@ Apple event code.
                                      #+sbcl
                                      (:file "sbcl" :depends-on ("shell"))
 
-                                     #-(or allegro clisp cmucl digitool lispworks openmcl sbcl)
+                                     #-(or allegro clisp cmu digitool lispworks openmcl sbcl)
                                      (:file "unsupported")
                                      
                                      #+digitool

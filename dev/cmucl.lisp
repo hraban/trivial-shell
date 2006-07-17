@@ -5,8 +5,8 @@
                    *shell-path*
                    (list "-c" command)
                    :input nil :output :stream :error :stream))
-         (output (read-stream-to-string (ext::process-output process)))
-         (error (read-stream-to-string (ext::process-error process))))
+         (output (file-to-string-as-lines (ext::process-output process)))
+         (error (file-to-string-as-lines (ext::process-error process))))
     (close (ext::process-output process))
     (close (ext::process-error process))
     
