@@ -13,18 +13,6 @@ Author: Gary King
   :description "Tests for trivial-shell"
   :components ((:module "tests"
 		        :components ((:file "tests"))))
-  :in-order-to ((test-op (load-op trivial-shell-test)))
-  :perform (test-op :after (op c)
-                    (describe
-                     (funcall 
-                      (intern (symbol-name (read-from-string "run-tests")) :lift) 
-                      :suite (intern 
-                              (symbol-name (read-from-string "trivial-shell-test"))
-                              :trivial-shell-test))))
   :depends-on (lift trivial-shell))
 
-(defmethod operation-done-p 
-           ((o test-op)
-            (c (eql (find-system 'trivial-shell-test))))
-  (values nil))
 
