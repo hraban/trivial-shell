@@ -1,6 +1,6 @@
 (in-package #:metashell)
 
-(defun shell-command (command)
+(defun %shell-command (command input)
   ;; BUG: CLisp doesn't allow output to user-specified stream
   (values
    nil
