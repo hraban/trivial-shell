@@ -59,6 +59,25 @@ returns (values output error-output exit-status).")
 	 (princ line s)
 	 (terpri s))))
 
+(defun shell-command (command &key input)
+  (let* ((pos-/ (position #\/ command))
+	 (pos-space (position #\Space command))
+	 (binary (subseq command 0 (or pos-space)))
+	 (args (and pos-space (subseq command pos-space))))
+    (when (or (not pos-/) (and pos-/ pos-space) (< pos-/ pos-space))
+      ;; no slash in the command portion, try to find the command with
+      ;; our path
+      (setf binary
+	    (or (loop for path in *shell-search-paths* do
+		     (let ((full-binary (make-pathname :name binary
+						       :defaults path))) 
+		       (when (probe-file full-binary)
+			 (return full-binary))))
+		binary)))
+    (multiple-value-bind (output error status)
+	(%shell-command (format nil "~a~@[ ~a~]" binary args) input)
+      (values output error status))))
+
 #|
 
 (sys:with-timeout (timeout 
