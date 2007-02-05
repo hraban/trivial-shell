@@ -1,7 +1,9 @@
 (in-package #:metashell)
 
-(defparameter *shell-path* "/bin/sh"
+(defparameter *bourne-compatible-shell* "/bin/sh"
   "The path to a Bourne compatible command shell in physical pathname notation.")
+
+(defvar *shell-search-paths* '("/usr/bin/" "/usr/local/bin"))
 
 (defparameter *ticks-per-second*
   #+openmcl
