@@ -2,15 +2,15 @@
 
 Author: Gary King
 
-Code forked from Kevin Rosenberg's KMRCL and borrowed from Alexander Repenning's 
-Apple event code.
+Code forked from Kevin Rosenberg's KMRCL and borrowed from
+Alexander Repenning's Apple event code.
 |#
 
 (defpackage :trivial-shell-system (:use #:cl #:asdf))
 (in-package :trivial-shell-system)
 
 (defsystem trivial-shell
-  :version "0.1"
+  :version "0.1.2"
   :author "Gary Warren King <gwking@metabang.com>"
   :maintainer "Gary Warren King <gwking@metabang.com>"
   :licence "MIT Style License"
@@ -23,8 +23,10 @@ Apple event code.
 		 (:file "package")
 		 (:file "definitions"
 			:depends-on ("package"))
+		 (:file "macros"
+			:depends-on ("package"))
 		 (:file "shell"
-			:depends-on ("definitions" #+digitool "mcl"))
+			:depends-on ("definitions" "macros" #+digitool "mcl"))
                                      
 		 #+allegro
 		 (:file "allegro" :depends-on ("shell"))
