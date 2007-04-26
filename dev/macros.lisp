@@ -10,22 +10,24 @@
 (defmacro with-stream-from-specifier ((stream stream-specifier direction
 					      &rest args)
 				      &body body)
-  (with-gensyms (s close? output)
-    `(let (,s (,close? t) ,output)
-       (unwind-protect
-         (setf ,output
-               (prog1
-                 (let (,stream)
-                   (setf (values ,s ,close?) 
-			 (make-stream-from-specifier 
-			  ,stream-specifier ,direction ,@args)
-                         ,stream ,s)
-                   ,@body)))
-         (when (and ,close? ,s)
-	   (let ((it (close-stream-specifier ,s)))
-	     (when it 
-	       (setf ,output it)))))
-       ,output)))
+  (with-gensyms (s close? result)
+    `(let ((,close? t)
+           ,s
+           ,result)
+      (unwind-protect
+           (setf ,result
+                 (multiple-value-list
+                     (let (,stream)
+                       (setf (values ,s ,close?)
+                             (make-stream-from-specifier
+                              ,stream-specifier ,direction ,@args))
+                       (setf ,stream ,s)
+                       ,@body)))
+        (when (and ,close? ,s)
+          (let ((it (close-stream-specifier ,s)))
+            (when it
+              (setf (first ,result) it)))))
+       (values-list ,result))))
 
 (defmacro with-input ((var source &rest args) &body body)
   "Create an input stream from source and bind it to var within the body of the with-input form. The stream will be closed if necessary on exit." 
