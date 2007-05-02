@@ -10,7 +10,7 @@ Alexander Repenning's Apple event code.
 (in-package :trivial-shell-system)
 
 (defsystem trivial-shell
-  :version "0.1.2"
+  :version "0.1.3"
   :author "Gary Warren King <gwking@metabang.com>"
   :maintainer "Gary Warren King <gwking@metabang.com>"
   :licence "MIT Style License"
