@@ -3,17 +3,23 @@
 (defun %shell-command (command input)
   (with-input (input-stream (or input :none))
     (let* ((process (sb-ext:run-program
-		     *bourne-compatible-shell*
-		     (list "-c" command)
-		     :input input-stream :output :stream :error :stream))
-	   (output (file-to-string-as-lines (sb-impl::process-output process)))
-	   (error (file-to-string-as-lines (sb-impl::process-error process))))
-      (close (sb-impl::process-output process))
-      (close (sb-impl::process-error process))
-      (values
-       output
-       error
-       (sb-impl::process-exit-code process)))))
+                     *bourne-compatible-shell*
+                     (list "-c" command)
+		     :wait nil :input input-stream :output :stream :error :stream))
+	   (output-thread (sb-thread:make-thread
+                           #'(lambda ()
+                               (file-to-string-as-lines
+                                (sb-impl::process-output process)))))
+	   (error-thread (sb-thread:make-thread
+                          #'(lambda ()
+                              (file-to-string-as-lines
+                               (sb-impl::process-error process))))))
+      (let ((error-code (sb-impl::process-exit-code (sb-impl::process-wait process)))
+            (output-string (sb-thread:join-thread output-thread))
+            (error-string (sb-thread:join-thread error-thread)))
+        (close (sb-impl::process-output process))
+        (close (sb-impl::process-error process))
+        (values output-string error-string error-code)))))
 
 (defun create-shell-process (command wait)
   (sb-ext:run-program
