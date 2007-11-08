@@ -10,7 +10,7 @@ Alexander Repenning's Apple event code.
 (in-package :trivial-shell-system)
 
 (defsystem trivial-shell
-  :version "0.1.3"
+  :version "0.1.5"
   :author "Gary Warren King <gwking@metabang.com>"
   :maintainer "Gary Warren King <gwking@metabang.com>"
   :licence "MIT Style License"
@@ -27,7 +27,7 @@ Alexander Repenning's Apple event code.
 			:depends-on ("package"))
 		 (:file "shell"
 			:depends-on ("definitions" "macros" #+digitool "mcl"))
-                                     
+
 		 #+allegro
 		 (:file "allegro" :depends-on ("shell"))
 		 #+clisp
@@ -56,9 +56,9 @@ Alexander Repenning's Apple event code.
 			  :components ((:static-file "index.lml"))))))
   :in-order-to ((test-op (load-op trivial-shell-test)))
   :perform (test-op :after (op c)
-                    (describe
-		     (funcall (intern (symbol-name '#:run-tests) :lift) 
-			      :suite '#:trivial-shell-test)))
+		    (funcall
+		      (intern (symbol-name '#:run-tests) :lift)
+		      :config :generic))
   :depends-on ())
 
 (defmethod operation-done-p 
