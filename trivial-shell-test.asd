@@ -1,10 +1,11 @@
 #|
-
 Author: Gary King
+
+See file COPYING for details
 |#
 
-(defpackage :trivial-shell-test-system (:use #:cl #:asdf))
-(in-package :trivial-shell-test-system)
+(defpackage #:trivial-shell-test-system (:use #:cl #:asdf))
+(in-package #:trivial-shell-test-system)
 
 (defsystem trivial-shell-test
   :author "Gary Warren King <gwking@metabang.com>"
@@ -13,6 +14,6 @@ Author: Gary King
   :description "Tests for trivial-shell"
   :components ((:module "tests"
 		        :components ((:file "tests"))))
-  :depends-on (lift trivial-shell))
+  :depends-on (:lift :trivial-shell))
 
 
