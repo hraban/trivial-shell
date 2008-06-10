@@ -28,7 +28,7 @@
    '(ccl:process-wait-with-timeout)
    #+lispworks
    '(mp:process-wait-with-timeout)
-   #+openmcl
+   #+(or openmcl ccl)
    '(ccl:process-wait-with-timeout)
    #+(and sbcl sb-threads)
    '(sb-threads:make-semaphore

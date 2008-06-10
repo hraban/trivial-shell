@@ -34,14 +34,14 @@
 		  (setf ,result (progn ,@body)))))) 
        (ccl:process-wait-with-timeout
         ,waiting-process
-        (* ,seconds #+openmcl ccl:*ticks-per-second* #+digitool 60)
+        (* ,seconds #+(or openmcl ccl) ccl:*ticks-per-second* #+digitool 60)
         (lambda ()
           (not (ccl::process-active-p ,process)))) 
        (when (ccl::process-active-p ,process)
 	 (ccl:process-kill ,process)
 	 (cerror "Timeout" 'timeout-error))
        (values ,result)))
-  #-(or allegro cmu sb-thread openmcl digitool)
+  #-(or allegro cmu sb-thread openmcl digitool ccl)
   `(progn ,@body))
 
 (setf (documentation 'shell-command 'function)
