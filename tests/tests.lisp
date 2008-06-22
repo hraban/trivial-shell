@@ -1,8 +1,8 @@
-(in-package #:common-lisp-user)
+#|
 
-(defpackage #:trivial-shell-test
-  (:use #:common-lisp #:lift #:trivial-shell)
-  (:shadowing-import-from #:lift #:with-timeout))
+these tests are both very unixy
+
+|#
 
 (in-package #:trivial-shell-test)
 
@@ -19,5 +19,6 @@
 		(shell-command "wc -c" :input "hello")
 		:junk-allowed t) 
 	       5 :test '=))
+
 
 
