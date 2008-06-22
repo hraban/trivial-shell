@@ -1,11 +1,14 @@
 (in-package #:trivial-shell)
 
-(defun %shell-command (command input)
+#-(or win32 (not sb-thread))
+(defun %shell-command (command input #+(or) output)
   (with-input (input-stream (or input :none))
     (let* ((process (sb-ext:run-program
                      *bourne-compatible-shell*
                      (list "-c" command)
-		     :wait nil :input input-stream :output :stream :error :stream))
+		     :wait nil :input input-stream 
+		     :output :stream
+		     :error :stream))
 	   (output-thread (sb-thread:make-thread
                            #'(lambda ()
                                (file-to-string-as-lines
@@ -14,12 +17,57 @@
                           #'(lambda ()
                               (file-to-string-as-lines
                                (sb-impl::process-error process))))))
-      (let ((error-code (sb-impl::process-exit-code (sb-impl::process-wait process)))
+      (let ((error-code
+	     (sb-impl::process-exit-code (sb-impl::process-wait process)))
             (output-string (sb-thread:join-thread output-thread))
             (error-string (sb-thread:join-thread error-thread)))
         (close (sb-impl::process-output process))
         (close (sb-impl::process-error process))
         (values output-string error-string error-code)))))
+
+#+(or win32 (not sb-thread))
+(defun %shell-command (command input #+(or) output)
+  (%shell-command-using-temporary-file command input))
+
+(defun %shell-command-using-temporary-file (command input)
+  (let ((output (open-temporary-file))
+	(error (open-temporary-file)))
+    (unwind-protect
+	 (progn
+	   (with-input (input-stream (or input :none))
+	     (let ((process
+		    (sb-ext:run-program
+		     *bourne-compatible-shell*
+		     (list "-c" (format nil "~a > ~a 2> ~a"
+					command 
+					(namestring output)
+					(namestring error)))
+		     :wait nil 
+		     :input input-stream 
+		     :output nil
+		     :error nil)))
+	       (let ((error-code (sb-impl::process-exit-code
+				  (sb-impl::process-wait process)))
+		     (output-string (read-temporary-file output))
+		     (error-string (read-temporary-file error)))
+		 (values output-string error-string error-code)))))
+      ;; cleanup
+      (delete-file output)
+      (delete-file error))))
+
+
+(defun open-temporary-file ()
+  (pathname
+   (loop thereis (open (format nil "TEMP-~D" (random 100000))
+		       :direction :probe :if-exists nil
+		       :if-does-not-exist :create))))
+
+(defun read-temporary-file (file-stream)
+  (with-open-file (stream file-stream)
+    (let ((buffer (make-array (file-length stream)
+			      :element-type 'character)))
+      (subseq buffer 0 (read-sequence buffer stream)))))
+
 
 (defun create-shell-process (command wait)
   (sb-ext:run-program
