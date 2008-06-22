@@ -2,8 +2,9 @@
 
 Author: Gary King
 
-Code forked from Kevin Rosenberg's KMRCL and borrowed from
-Alexander Repenning's Apple event code.
+Code originally forked from Kevin Rosenberg's KMRCL and borrowed from
+Alexander Repenning's Apple event code. It was then subjected to bursts
+of gamma radiation and repeated does of the sonic screwdriver.
 |#
 
 (defpackage :trivial-shell-system (:use #:cl #:asdf))
@@ -16,6 +17,22 @@ Alexander Repenning's Apple event code.
   :licence "MIT Style License"
   :description "OS and Implementation independent access to the shell"
   :components ((:module 
+		"notes"
+		:pathname "dev/"
+		:components 
+		((:static-file "notes.text")))
+	       (:module 
+		"timeout"
+		:pathname "dev/"
+		:components 
+		((:file "with-timeout")))
+	       (:module 
+		"setup"
+		:pathname "dev/"
+		:depends-on ("timeout")
+		:components 
+		((:file "package")))
+	       (:module 
 		"dev"
 		:depends-on ("setup")
 		:components 

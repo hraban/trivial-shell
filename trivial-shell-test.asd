@@ -12,8 +12,16 @@ See file COPYING for details
   :maintainer "Gary Warren King <gwking@metabang.com>"
   :licence "MIT Style License"
   :description "Tests for trivial-shell"
-  :components ((:module "tests"
-		        :components ((:file "tests"))))
+  :components ((:module 
+		"setup"
+		:pathname "tests/"
+		:components 
+		((:file "package")))
+	       (:module 
+		"tests"
+		:depends-on ("setup")
+		:components ((:file "tests")
+			     (:file "test-timeout"))))
   :depends-on (:lift :trivial-shell))
 
 
