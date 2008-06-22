@@ -1,7 +1,7 @@
 (in-package #:common-lisp-user)
 
 (defpackage #:trivial-shell
-  (:use #:common-lisp)
+  (:use #:common-lisp #:com.metabang.trivial-timeout)
   (:nicknames #:metashell)
   (:export 
    #:shell-command

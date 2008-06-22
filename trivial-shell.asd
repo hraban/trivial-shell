@@ -17,35 +17,35 @@ Alexander Repenning's Apple event code.
   :description "OS and Implementation independent access to the shell"
   :components ((:module 
 		"dev"
+		:depends-on ("setup")
 		:components 
-		((:static-file "notes.text")
-				     
-		 (:file "package")
-		 (:file "definitions"
-			:depends-on ("package"))
-		 (:file "macros"
-			:depends-on ("package"))
+		((:file "definitions")
+		 (:file "macros")
 		 (:file "shell"
-			:depends-on ("definitions" "macros" #+digitool "mcl"))
-
+			:depends-on ("definitions" "macros" #+digitool "mcl"))))
+	       (:module
+		"port"
+		:pathname "dev/"
+		:depends-on ("dev")
+		:components
+		(
 		 #+allegro
-		 (:file "allegro" :depends-on ("shell"))
+		 (:file "allegro")
 		 #+clisp
-		 (:file "clisp" :depends-on ("shell"))
+		 (:file "clisp")
 		 #+cmu
-		 (:file "cmucl" :depends-on ("shell"))
+		 (:file "cmucl")
 		 #+digitool
-		 (:file "digitool" :depends-on ("shell"))
+		 (:file "digitool")
 		 #+lispworks
-		 (:file "lispworks" :depends-on ("shell"))
+		 (:file "lispworks")
 		 #+openmcl
-		 (:file "openmcl" :depends-on ("shell"))
+		 (:file "openmcl")
 		 #+sbcl
-		 (:file "sbcl" :depends-on ("shell"))
+		 (:file "sbcl")
 
 		 #-(or allegro clisp cmu digitool lispworks openmcl sbcl)
-		 (:file "unsupported")
-                                     
+		 (:file "unsupported")                                     
 		 #+digitool
 		 (:module "mcl"
 			  :components ((:file "eval-apple-script")))))
