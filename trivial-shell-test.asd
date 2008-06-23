@@ -16,12 +16,12 @@ See file COPYING for details
 		"setup"
 		:pathname "tests/"
 		:components 
-		((:file "package")))
+		((:file "package")
+		 (:file "tests" :depends-on ("package"))))
 	       (:module 
 		"tests"
 		:depends-on ("setup")
-		:components ((:file "tests")
-			     (:file "test-timeout"))))
+		:components ((:file "test-timeout"))))
   :depends-on (:lift :trivial-shell))
 
 

@@ -2,4 +2,26 @@
 
 (defpackage #:trivial-shell-test
   (:use #:common-lisp #:lift #:trivial-shell)
-  (:shadowing-import-from #:lift #:with-timeout))
+  (:shadowing-import-from #:trivial-shell #:with-timeout))
+
+#|
+(defpackage #:p1
+  (:use #:common-lisp))
+
+(defpackage #:p2
+  (:use #:common-lisp))
+
+
+(defun p1::f ()
+  :p1)
+
+(defun p2::f ()
+  :p2)
+
+(defpackage p3
+  (:use #:common-lisp)
+  (:shadowing-import-from #:p1 #:f))
+
+(p3::f)
+
+|#
