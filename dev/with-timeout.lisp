@@ -35,7 +35,7 @@
 		(handler-case 
 		    (sb-ext:with-timeout ,gseconds (doit))
 		  (sb-ext::timeout (c)
-		    (error "Timeout" 'timeout-error)))
+		    (error 'timeout-error)))
 		#+(and sbcl (not sb-thread))
 		(let ((,gused-timer? nil))
 		  (catch ',glabel
