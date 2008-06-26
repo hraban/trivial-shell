@@ -10,12 +10,14 @@
 
 (in-package #:com.metabang.trivial-timeout)
 
+#-:com.metabang.trivial-timeout
 (define-condition timeout-error (error)
                   ()
   (:report (lambda (c s)
 	     (declare (ignore c))
 	     (format s "Process timeout"))))
 
+#-:com.metabang.trivial-timeout
 (defmacro with-timeout ((seconds) &body body)
   (let ((gseconds (gensym "seconds-"))
 	#+(and sbcl (not sb-thread))
@@ -72,3 +74,4 @@
 	       (t
 		(doit)))))))
 
+(pushnew :com.metabang.trivial-timeout *features*)
