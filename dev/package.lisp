@@ -2,7 +2,7 @@
 
 (defpackage #:trivial-shell
   (:use #:common-lisp #:com.metabang.trivial-timeout)
-  (:nicknames #:metashell)
+  (:nicknames #:com.metabang.trivial-shell #:metashell)
   (:export 
    #:shell-command
    #:with-timeout
