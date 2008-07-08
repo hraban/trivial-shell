@@ -14,3 +14,11 @@
      output
      error
      (ext::process-exit-code process))))
+
+(defun %os-process-id ()
+  (error 'unsupported-function-error :function 'os-process-id))
+
+(defun %get-env-var (name)
+  (cdr (assoc (intern (substitute #\_ #\- name)
+		      :keyword)
+	      ext:*environment-list*)))

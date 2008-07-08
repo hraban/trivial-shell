@@ -80,3 +80,9 @@
 
 (defun process-exit-code (process)
   (sb-ext:process-exit-code process))
+
+(defun %os-process-id ()
+  (error 'unsupported-function-error :function 'os-process-id))
+
+(defun %get-env-var (name)
+  (sb-ext:posix-getenv name))

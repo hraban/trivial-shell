@@ -24,3 +24,9 @@
 
 (defun process-exit-code (process)
   (nth-value 1 (ccl:external-process-status process)))
+
+(defun %os-process-id ()
+  (error 'unsupported-function-error :function 'os-process-id))
+
+(defun %get-env-var (name)
+  (ccl::getenv name))

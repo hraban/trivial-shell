@@ -12,3 +12,9 @@
               :output-stream output)))
         (values (get-output-stream-string output) nil status))
       (close output))))
+
+(defun %os-process-id ()
+  (error 'unsupported-function-error :function 'os-process-id))
+
+(defun %get-env-var (name)
+  (lw:environment-variable name))

@@ -39,7 +39,11 @@ returns (values output error-output exit-status).")
 	(%shell-command (format nil "~a~@[ ~a~]" binary args) input)
       (values output error status))))
 
-#|
+(defun os-process-id ()
+  (%os-process-id))
+
+(defun get-env-var (name)
+  (%get-env-var name))
 
 #+openmcl
 (let ((process (ccl:run-program  
