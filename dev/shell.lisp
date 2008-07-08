@@ -44,26 +44,3 @@ returns (values output error-output exit-status).")
 
 (defun get-env-var (name)
   (%get-env-var name))
-
-#+openmcl
-(let ((process (ccl:run-program  
-                "/bin/sh"
-                (list "-c" command)
-                :input nil 
-                :output nil
-                :error nil
-                :wait nil))
-      (status nil)
-      (exit-code nil))
-  (ccl:process-wait-with-timeout
-   "WAITING"
-   (* ccl:*ticks-per-second* timeout)
-   (lambda ()
-     (setf (values status exit-code) 
-           (ccl:external-process-status process))
-     (not (eq status :running))))
-  (if (eq status :running)
-    (progn
-      (error 'timeout-error :command command))
-    (values exit-code)))
-|#

@@ -54,14 +54,19 @@ of gamma radiation and repeated does of the sonic screwdriver.
 		 (:file "cmucl")
 		 #+digitool
 		 (:file "digitool")
+		 #+ecl
+		 (:file "ecl")
 		 #+lispworks
 		 (:file "lispworks")
 		 #+openmcl
 		 (:file "openmcl")
 		 #+sbcl
 		 (:file "sbcl")
+		 #+scl
+		 (file "scl")
 
-		 #-(or allegro clisp cmu digitool lispworks openmcl sbcl)
+		 #-(or allegro clisp cmu digitool ecl 
+		       lispworks openmcl sbcl scl)
 		 (:file "unsupported")                                     
 		 #+digitool
 		 (:module "mcl"
