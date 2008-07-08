@@ -1,6 +1,6 @@
 (in-package #:trivial-shell)
 
-(defun shell-command (command)
+(defun %shell-command (command)
   ;; BUG: Lispworks combines output and error streams
   (let ((output (make-string-output-stream)))
     (unwind-protect

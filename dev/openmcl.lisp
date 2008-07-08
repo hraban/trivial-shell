@@ -1,6 +1,6 @@
 (in-package #:trivial-shell)
 
-(defun shell-command (command)
+(defun %shell-command (command)
   (let* ((process (create-shell-process command t))
          (output (file-to-string-as-lines 
                   (ccl::external-process-output-stream process)))
