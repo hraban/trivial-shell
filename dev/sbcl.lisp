@@ -30,31 +30,33 @@
   (%shell-command-using-temporary-file command input))
 
 (defun %shell-command-using-temporary-file (command input)
+  (when input
+    (error "This version of trivial-shell does not support the input parameter."))
   (let ((output (open-temporary-file))
 	(error (open-temporary-file)))
     (unwind-protect
-	 (progn
-	   (with-input (input-stream (or input :none))
-	     (let ((process
-		    (sb-ext:run-program
-		     *bourne-compatible-shell*
-		     (list "-c" (format nil "~a > ~a 2> ~a"
-					command 
-					(namestring output)
-					(namestring error)))
-		     :wait nil 
-		     :input input-stream 
-		     :output nil
-		     :error nil)))
-	       (let ((error-code (sb-impl::process-exit-code
-				  (sb-impl::process-wait process)))
-		     (output-string (read-temporary-file output))
-		     (error-string (read-temporary-file error)))
-		 (values output-string error-string error-code)))))
+	 (let ((process
+		(sb-ext:run-program
+		 *bourne-compatible-shell*
+		 (list "-c" (format nil "~a > ~a 2> ~a"
+				    command 
+				    (namestring output)
+				    (namestring error)))
+		 :wait t
+		 :input nil
+		 :output nil
+		 :error nil)))
+	   (let ((error-code (sb-impl::process-exit-code
+			      (sb-impl::process-wait process)))
+		 (output-string (read-temporary-file output))
+		 (error-string (read-temporary-file error)))
+	     (values output-string error-string error-code)))
       ;; cleanup
       (delete-file output)
       (delete-file error))))
 
+(with-input (input-stream (or input :none))
+  input-stream)
 
 (defun open-temporary-file ()
   (pathname
