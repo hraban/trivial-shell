@@ -55,9 +55,6 @@
       (delete-file output)
       (delete-file error))))
 
-(with-input (input-stream (or input :none))
-  input-stream)
-
 (defun open-temporary-file ()
   (pathname
    (loop thereis (open (format nil "TEMP-~D" (random 100000))
