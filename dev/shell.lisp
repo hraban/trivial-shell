@@ -5,10 +5,6 @@
 (defgeneric file-to-string-as-lines (pathname)
   (:documentation ""))
 
-(setf (documentation 'shell-command 'function)
-      "Synchronously execute the result using a Bourne-compatible shell,
-returns (values output error-output exit-status).")
-
 (defmethod file-to-string-as-lines ((pathname pathname))
   (with-open-file (stream pathname :direction :input)
     (file-to-string-as-lines stream)))
@@ -21,6 +17,15 @@ returns (values output error-output exit-status).")
 	 (terpri s))))
 
 (defun shell-command (command &key input)
+  "Synchronously execute `command` using a Bourne-compatible shell,
+returns (values output error-output exit-status).
+
+The `command` can be a full path to a shell executable binary
+or just its name. In the later case, the variable `*shell-search-paths*`
+will be used to find the executable.
+
+Depending on the implementation, the variable `*bourne-compatible-shell*`
+may be used to find a shell to use in executing `command`."
   (let* ((pos-/ (position #\/ command))
 	 (pos-space (position #\Space command))
 	 (binary (subseq command 0 (or pos-space)))
@@ -40,6 +45,7 @@ returns (values output error-output exit-status).")
       (values output error status))))
 
 (defun os-process-id ()
+  "Return the process-id of the currently executing OS process."
   (%os-process-id))
 
 (defun get-env-var (name)
