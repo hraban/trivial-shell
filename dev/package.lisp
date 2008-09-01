@@ -6,8 +6,10 @@
   (:export 
    #:shell-command
    #:with-timeout
+   #:get-env-var
    #:*bourne-compatible-shell*
    #:*shell-search-paths*
+
    ;; conditions
    #:timeout-error
    #:timeout-error-command))

@@ -43,4 +43,5 @@ returns (values output error-output exit-status).")
   (%os-process-id))
 
 (defun get-env-var (name)
+  "Return the value of the environment variable `name`."
   (%get-env-var name))
