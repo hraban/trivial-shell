@@ -1,6 +1,8 @@
 (in-package #:metashell)
 
 (defun %shell-command (command input)
+  (when input
+    (error "This version of trivial-shell does not support the input parameter."))
   ;; BUG: CLisp doesn't allow output to user-specified stream
   (values
    nil

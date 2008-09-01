@@ -1,6 +1,8 @@
 (in-package #:trivial-shell)
 
-(defun %shell-command (command)
+(defun %shell-command (command input)
+  (when input
+    (error "This version of trivial-shell does not support the input parameter."))
   (let* ((process (create-shell-process command t))
          (output (file-to-string-as-lines 
                   (ccl::external-process-output-stream process)))

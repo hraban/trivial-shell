@@ -1,6 +1,6 @@
 (in-package #:trivial-shell)
 
-(defun shell-command (command)
+(defun shell-command (command input)
   (error 'unsupported-function-error :function 'shell-command))
 
 (defun %os-process-id ()
