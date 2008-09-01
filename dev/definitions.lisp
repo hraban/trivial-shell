@@ -5,12 +5,3 @@
 physical pathname notation.")
 
 (defvar *shell-search-paths* '("/usr/bin/" "/usr/local/bin"))
-
-(defparameter *ticks-per-second*
-  #+(or openmcl ccl)
-  ccl:*ticks-per-second*
-  #+digitool
-  60
-  #-(or digitool openmcl ccl)
-  60)
-
