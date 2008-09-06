@@ -1,5 +1,6 @@
 (in-package #:com.metabang.trivial-timeout)
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
 (unless (and (find-symbol (symbol-name '#:with-timeout)
 			  '#:com.metabang.trivial-timeout)
 	     (fboundp (find-symbol (symbol-name '#:with-timeout)
@@ -64,4 +65,4 @@
 		#-(or allegro cmu sb-thread openmcl ccl mcl digitool)
 		(progn (doit)))
 	       (t
-		(doit))))))))
+		(doit)))))))))
