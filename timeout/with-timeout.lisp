@@ -1,23 +1,15 @@
-(in-package #:common-lisp-user)
-
-(defpackage #:com.metabang.trivial-timeout
-  (:use #:common-lisp)
-  (:nicknames #:trivial-timeout)
-  (:export 
-   #:with-timeout
-   #:timeout-error
-   #:timeout-error-command))
-
 (in-package #:com.metabang.trivial-timeout)
 
-#-:com.metabang.trivial-timeout
+(unless (and (find-symbol (symbol-name '#:with-timeout)
+			  '#:com.metabang.trivial-timeout)
+	     (fboundp (find-symbol (symbol-name '#:with-timeout)
+			  '#:com.metabang.trivial-timeout)))
 (define-condition timeout-error (error)
                   ()
   (:report (lambda (c s)
 	     (declare (ignore c))
 	     (format s "Process timeout"))))
 
-#-:com.metabang.trivial-timeout
 (defmacro with-timeout ((seconds) &body body)
   (let ((gseconds (gensym "seconds-"))
 	#+(and sbcl (not sb-thread))
@@ -72,6 +64,4 @@
 		#-(or allegro cmu sb-thread openmcl ccl mcl digitool)
 		(progn (doit)))
 	       (t
-		(doit)))))))
-
-(pushnew :com.metabang.trivial-timeout *features*)
+		(doit))))))))
