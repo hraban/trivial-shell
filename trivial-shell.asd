@@ -21,11 +21,12 @@ of gamma radiation and repeated does of the sonic screwdriver.
 		:pathname "dev/"
 		:components 
 		((:static-file "notes.text")))
-	       (:module 
+	       (:module
 		"timeout"
-		:pathname "dev/"
+		:pathname "timeout/"
 		:components 
-		((:file "with-timeout")))
+		((:file "package")
+		 (:file "with-timeout" :depends-on ("package"))))
 	       (:module 
 		"setup"
 		:pathname "dev/"
