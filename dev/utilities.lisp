@@ -10,10 +10,24 @@
   (dolist (mapping *os-alist*)
     (destructuring-bind (os &rest features) mapping
       (dolist (f features)
-	(when (find f *features*) (return-from os os))))))
+	(when (find f *features*) (return-from host-os os))))))
 
+#+(or)
 (defun os-pathname (pathname &key (os (os)))
   (namestring pathname))
+
+(defun directory-pathname-p (pathname)
+  "Does `pathname` syntactically  represent a directory?
+
+A directory-pathname is a pathname _without_ a filename. The three
+ways that the filename components can be missing are for it to be `nil`, 
+`:unspecific` or the empty string.
+"
+  (flet ((check-one (x)
+	   (not (null (member x '(nil :unspecific "")
+			      :test 'equal)))))
+    (and (check-one (pathname-name pathname))
+	 (check-one (pathname-type pathname)))))
 
 #+(or)
 ;; from asdf-install

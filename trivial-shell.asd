@@ -39,6 +39,7 @@ of gamma radiation and repeated does of the sonic screwdriver.
 		:components 
 		((:file "definitions")
 		 (:file "macros")
+		 (:file "utilities")
 		 (:file "shell"
 			:depends-on ("definitions" "macros" #+digitool "mcl"))))
 	       (:module

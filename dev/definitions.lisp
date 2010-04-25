@@ -4,4 +4,4 @@
   "The path to a Bourne compatible command shell in 
 physical pathname notation.")
 
-(defvar *shell-search-paths* '("/usr/bin/" "/usr/local/bin"))
+(defvar *shell-search-paths* '("/usr/bin/" "/usr/local/bin/"))

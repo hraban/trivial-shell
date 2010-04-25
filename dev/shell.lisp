@@ -37,7 +37,8 @@ may be used to find a shell to use in executing `command`."
 	    (or (loop for path in *shell-search-paths* do
 		     (let ((full-binary (make-pathname :name binary
 						       :defaults path))) 
-		       (when (probe-file full-binary)
+		       (when (and (probe-file full-binary)
+				  (directory-pathname-p full-binary))
 			 (return full-binary))))
 		binary)))
     (multiple-value-bind (output error status)
