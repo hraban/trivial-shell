@@ -30,7 +30,10 @@ may be used to find a shell to use in executing `command`."
 	 (pos-space (position #\Space command))
 	 (binary (subseq command 0 (or pos-space)))
 	 (args (and pos-space (subseq command pos-space))))
-    (when (or (not pos-/) (and pos-/ pos-space) (< pos-/ pos-space))
+    (when (or (not pos-/)
+	      (and pos-/ pos-space)
+	      (and pos-space
+		   (< pos-/ pos-space)))
       ;; no slash in the command portion, try to find the command with
       ;; our path
       (setf binary
