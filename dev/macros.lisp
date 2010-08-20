@@ -72,8 +72,17 @@
 
 (defmethod make-stream-from-specifier ((stream-specifier string) 
 				       (direction symbol) &rest args)
-  (declare (ignore args))
-  (values (make-string-input-stream stream-specifier) nil))
+  (let ((start (getf args :start 0))
+	(end (getf args :end)))
+    (values (make-string-input-stream stream-specifier start end) nil)))
+
+(defmethod make-stream-from-specifier ((stream-specifier string) 
+				       (direction (eql :output)) &rest args)
+  (let ((if-does-not-exist (getf args :if-does-not-exist :create)))
+    (remf args :if-does-not-exist)
+    (values (apply #'open stream-specifier 
+		   :direction direction :if-does-not-exist if-does-not-exist args)
+	    t)))
 
 (defmethod close-stream-specifier (s)
   (close s)
