@@ -3,26 +3,20 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>source/resources/header.md</string>
+	<string>source/resources/footer.md</string>
 	<key>documents</key>
 	<array>
 		<dict>
 			<key>filename</key>
 			<string>source/index.mmd</string>
 			<key>lastUsed</key>
-			<date>2010-04-25T15:22:07Z</date>
+			<date>2009-04-29T14:01:17Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>source/user-guide.mmd</string>
 			<key>lastUsed</key>
 			<date>2008-09-01T16:36:02Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>../../shared/shared-links.md</string>
-			<key>lastUsed</key>
-			<date>2010-04-25T15:20:41Z</date>
 		</dict>
 		<dict>
 			<key>expanded</key>
@@ -36,36 +30,22 @@
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
-	<integer>143</integer>
+	<integer>430</integer>
 	<key>metaData</key>
 	<dict>
-		<key>../../shared/shared-links.md</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>32</integer>
-		</dict>
 		<key>source/index.mmd</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>53</integer>
 				<key>line</key>
-				<integer>13</integer>
+				<integer>60</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>18</integer>
 		</dict>
 		<key>source/resources/footer.md</key>
 		<dict>
@@ -104,7 +84,7 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>19</integer>
+				<integer>10</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -130,13 +110,12 @@
 	<array>
 		<string>source/resources/header.md</string>
 		<string>source/index.mmd</string>
-		<string>../../shared/shared-links.md</string>
 		<string>source/resources/footer.md</string>
 		<string>source/user-guide.mmd</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{516, 0}, {578, 778}}</string>
+	<string>{{596, 45}, {578, 788}}</string>
 </dict>
 </plist>

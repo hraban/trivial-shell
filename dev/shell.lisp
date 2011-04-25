@@ -27,7 +27,7 @@ will be used to find the executable.
 Depending on the implementation, the variable `*bourne-compatible-shell*`
 may be used to find a shell to use in executing `command`."
   (let* ((pos-/ (position #\/ command))
-	 (pos-space (position #\Space command))
+	 (pos-space (find-command-ending-in-string command))
 	 (binary (subseq command 0 (or pos-space)))
 	 (args (and pos-space (subseq command pos-space))))
     (when (or (not pos-/)
@@ -47,6 +47,17 @@ may be used to find a shell to use in executing `command`."
     (multiple-value-bind (output error status)
 	(%shell-command (format nil "~a~@[ ~a~]" binary args) input)
       (values output error status))))
+
+(defun find-command-ending-in-string (command)
+  (let ((checking? t))
+    (loop for ch across command 
+       for i from 0 do
+	 (cond ((and checking? (char= ch #\Space))
+		(return i))
+	       ((char= ch #\\)
+		(setf checking? nil))
+	       (t
+		(setf checking? t))))))
 
 (defun os-process-id ()
   "Return the process-id of the currently executing OS process."

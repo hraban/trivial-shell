@@ -21,4 +21,10 @@ these tests are both very unixy
 	       5 :test '=))
 
 
+(deftestsuite spaces-in-command (trivial-shell-test)
+  ()
+  (:documentation "https://github.com/gwkkwg/trivial-shell/issues/1"))
 
+(addtest (spaces-in-command)
+  test-1
+  (ensure-same (parse-integer (shell-command "tests/a\\ b\\ c.sh 56") :junk-allowed t) 56))

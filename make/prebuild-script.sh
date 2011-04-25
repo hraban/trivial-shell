@@ -9,6 +9,6 @@ echo $root_dir
 echo $timeout_dir
 
 # update with-timeout
-cp ~/darcs/trivial-timeout/dev/package.lisp $timeout_dir
-cp ~/darcs/trivial-timeout/dev/with-timeout.lisp $timeout_dir
+cp ../trivial-timeout/dev/package.lisp $timeout_dir
+cp ../trivial-timeout/dev/with-timeout.lisp $timeout_dir
 
