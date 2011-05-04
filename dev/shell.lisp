@@ -16,7 +16,10 @@
 	 (princ line s)
 	 (terpri s))))
 
-(defun shell-command (command &key input)
+(defmethod shell-command ((command pathname) &key input)
+  (shell-command (namestring command) :input input))
+
+(defmethod shell-command ((command t) &key input)
   "Synchronously execute `command` using a Bourne-compatible shell,
 returns (values output error-output exit-status).
 
