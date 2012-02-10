@@ -1,9 +1,7 @@
 (in-package #:trivial-shell)
 
 (defun %shell-command (command input)
-  (when input
-    (error "This version of trivial-shell does not support the input parameter."))
-  (let* ((process (create-shell-process command t))
+  (let* ((process (create-shell-process command t input))
          (output (file-to-string-as-lines 
                   (ccl::external-process-output-stream process)))
          (error (file-to-string-as-lines
@@ -14,12 +12,13 @@
             error
             (process-exit-code process))))
 
-(defun create-shell-process (command wait)
-  (ccl:run-program
-   *bourne-compatible-shell*
-   (list "-c" command)
-   :input nil :output :stream :error :stream
-   :wait wait))
+(defun create-shell-process (command wait &optional input)
+  (with-input-from-string (input-stream (or input nil))
+   (ccl:run-program
+    *bourne-compatible-shell*
+    (list "-c" command)
+    :input input-stream :output :stream :error :stream
+    :wait wait)))
 
 (defun process-alive-p (process)
   (eq (nth-value 0 (ccl:external-process-status process)) :running))
