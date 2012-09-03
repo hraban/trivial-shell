@@ -85,3 +85,6 @@
 
 (defun %get-env-var (name)
   (sb-ext:posix-getenv name))
+
+(defun %exit (code)
+  (sb-ext:exit :code code))

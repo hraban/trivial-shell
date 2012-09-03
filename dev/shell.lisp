@@ -69,3 +69,12 @@ may be used to find a shell to use in executing `command`."
 (defun get-env-var (name)
   "Return the value of the environment variable `name`."
   (%get-env-var name))
+
+(defun exit (&optional (code :success))
+  "Exit the process. CODE is either a numeric exit code, or the special values :SUCCESS
+or :FAILURE, which maps to the appropriate exit codes for the operating system."
+  ;; Currently, :SUCCESS always maps to 0 and :FAILURE maps to 1
+  (%exit (cond ((eq code :success) 0)
+               ((eq code :failure) 1)
+               ((integerp code) code)
+               (t (error "Illegal exit code: ~s (should be an integer or the values :SUCCESS or :FAILURE)" code)))))

@@ -31,3 +31,6 @@
 
 (defun %get-env-var (name)
   (ccl::getenv name))
+
+(defun %exit (code)
+  (ccl:quit code))

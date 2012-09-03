@@ -22,3 +22,6 @@
   (cdr (assoc (intern (substitute #\_ #\- name)
 		      :keyword)
 	      ext:*environment-list*)))
+
+(defun %exit (code)
+  (ext:quit code))
