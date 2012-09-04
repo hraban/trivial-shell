@@ -8,3 +8,6 @@
 
 (defun %get-env-var (name)
   (ext:getenv name))
+
+(defun %exit (code)
+  (ext:exit code))

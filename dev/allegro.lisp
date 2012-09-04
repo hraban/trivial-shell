@@ -32,3 +32,5 @@
 (defun %get-env-var (name)
   (sys:getenv name))
 
+(defun %exit (code)
+  (excl:exit code))

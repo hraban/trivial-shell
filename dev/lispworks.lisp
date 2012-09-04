@@ -20,3 +20,6 @@
 
 (defun %get-env-var (name)
   (lw:environment-variable name))
+
+(defun %exit (code)
+  (lw:quit :status code))

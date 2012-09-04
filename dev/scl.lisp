@@ -8,3 +8,6 @@
 
 (defun %get-env-var (name)
   (cdr (assoc name ext:*environment-list* :test #'string=))
+
+(defun %exit (code)
+  (ext:quit :status code))

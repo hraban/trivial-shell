@@ -85,3 +85,17 @@
 
 (defun %get-env-var (name)
   (sb-ext:posix-getenv name))
+
+(defun symbol-if-external (name package)
+  (multiple-value-bind (symbol s) (find-symbol name package)
+    (when (eq s :external)
+      symbol)))
+
+(defun %exit (code)
+  (let ((exit-sym (symbol-if-external "EXIT" "SB-EXT")))
+    (if exit-sym
+        (funcall exit-sym :code code)
+        (let ((quit-sym (symbol-if-external "QUIT" "SB-EXT")))
+          (if quit-sym
+              (funcall quit-sym :unix-status code :recklessly-p t)
+              (error "SBCL version without EXIT or QUIT."))))))
