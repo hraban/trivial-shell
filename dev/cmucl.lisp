@@ -26,4 +26,4 @@
 (defun %exit (code)
   (unless (zerop code)
     (error "CMUCL does not support exit codes."))
-  (ext:quit))
+  (ext:quit t))
