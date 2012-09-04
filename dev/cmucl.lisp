@@ -24,4 +24,6 @@
 	      ext:*environment-list*)))
 
 (defun %exit (code)
-  (ext:quit code))
+  (unless (zerop code)
+    (error "CMUCL does not support exit codes."))
+  (ext:quit))
