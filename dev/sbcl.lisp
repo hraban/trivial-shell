@@ -97,7 +97,5 @@
         (funcall exit-sym :code code)
         (let ((quit-sym (symbol-if-external "QUIT" "SB-EXT")))
           (if quit-sym
-              (if (zerop code)
-                  (funcall quit-sym :recklessly-p t)
-                  (error "This version of SBCL does not support exiting with a code."))
+              (funcall quit-sym :unix-status code :recklessly-p t)
               (error "SBCL version without EXIT or QUIT."))))))
