@@ -22,3 +22,8 @@
   (cdr (assoc (intern (substitute #\_ #\- name)
 		      :keyword)
 	      ext:*environment-list*)))
+
+(defun %exit (code)
+  (unless (zerop code)
+    (error "CMUCL does not support exit codes."))
+  (ext:quit t))

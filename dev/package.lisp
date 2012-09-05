@@ -7,6 +7,7 @@
    #:shell-command
    #:with-timeout
    #:get-env-var
+   #:exit
    #:*bourne-compatible-shell*
    #:*shell-search-paths*
 
