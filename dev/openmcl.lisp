@@ -13,7 +13,7 @@
             (process-exit-code process))))
 
 (defun create-shell-process (command wait &optional input)
-  (with-input-from-string (input-stream input)
+  (with-input (input-stream (or input :none))
    (ccl:run-program
     *bourne-compatible-shell*
     (list "-c" command)
