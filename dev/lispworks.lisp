@@ -16,6 +16,9 @@
       (close output))))
 
 (defun %os-process-id ()
+  #+(or unix windows)
+  (system::getpid)
+  #-(or unix windows)
   (error 'unsupported-function-error :function 'os-process-id))
 
 (defun %get-env-var (name)

@@ -3,13 +3,14 @@
 (defpackage #:trivial-shell
   (:use #:common-lisp #:com.metabang.trivial-timeout)
   (:nicknames #:com.metabang.trivial-shell #:metashell)
-  (:export 
+  (:export
    #:shell-command
    #:with-timeout
    #:get-env-var
    #:exit
    #:*bourne-compatible-shell*
    #:*shell-search-paths*
+   #:os-process-id
 
    ;; conditions
    #:timeout-error
@@ -17,7 +18,7 @@
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (import
-   #+allegro 
+   #+allegro
    '(mp:process-wait-with-timeout)
    #+clisp
    '()
