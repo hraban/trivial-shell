@@ -3,11 +3,13 @@
 (defun %shell-command (command input)
   #+unix
   (with-input (input-stream (or input :none))
-    (let (proc out-string err-string out-stream err-stream in-stream)
+    (let (proc out-string err-string in-string out-stream err-stream in-stream)
       (setf proc (system:run-program *bourne-compatible-shell* (list "-c" command) :wait nil))
       (when input-stream
 	(setf in-stream (system:process-input proc))
-	(write-string (file-to-string-as-lines input-stream) :output-stream in-stream)
+	(setf in-string (file-to-string-as-lines input-stream))
+	;; on all UNIXen the line-ending character is of 1 byte length
+	(write-string in-string in-stream :end (- (length in-string) 1))
 	(close in-stream))
       (setf out-stream (system:process-output proc))
       (setf err-stream (system:process-error proc))
