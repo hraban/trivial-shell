@@ -48,6 +48,8 @@ of gamma radiation and repeated does of the sonic screwdriver.
 		:depends-on ("dev")
 		:components
 		(
+		 #+abcl
+		 (:file "abcl")
 		 #+allegro
 		 (:file "allegro")
 		 #+clisp
@@ -67,7 +69,7 @@ of gamma radiation and repeated does of the sonic screwdriver.
 		 #+scl
 		 (file "scl")
 
-		 #-(or allegro clisp cmu digitool ecl 
+		 #-(or abcl allegro clisp cmu digitool ecl
 		       lispworks openmcl sbcl scl)
 		 (:file "unsupported")                                     
 		 #+digitool
