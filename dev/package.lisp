@@ -3,7 +3,7 @@
 (defpackage #:trivial-shell
   (:use #:common-lisp #:com.metabang.trivial-timeout)
   (:nicknames #:com.metabang.trivial-shell #:metashell)
-  (:export 
+  (:export
    #:shell-command
    #:with-timeout
    #:get-env-var
@@ -17,7 +17,7 @@
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (import
-   #+allegro 
+   #+allegro
    '(mp:process-wait-with-timeout)
    #+clisp
    '()
@@ -34,8 +34,8 @@
    #+(or openmcl ccl)
    '(ccl:process-wait-with-timeout)
    #+(and sbcl sb-threads)
-   '(sb-threads:make-semaphore
-     sb-threads:signal-semaphore)
+   '(sb-thread:make-semaphore
+     sb-thread:signal-semaphore)
    #+(and sbcl (not sb-threads))
    '()
    '#:trivial-shell))
