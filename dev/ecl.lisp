@@ -4,7 +4,7 @@
   (error 'unsupported-function-error :function 'shell-command))
 
 (defun %os-process-id ()
-  (error 'unsupported-function-error :function 'os-process-id))
+  (ext:getpid))
 
 (defun %get-env-var (name)
   (ext:getenv name))

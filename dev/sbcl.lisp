@@ -6,7 +6,7 @@
     (let* ((process (sb-ext:run-program
                      *bourne-compatible-shell*
                      (list "-c" command)
-		     :wait nil :input input-stream 
+		     :wait nil :input input-stream
 		     :output :stream
 		     :error :stream))
 	   (output-thread (sb-thread:make-thread
@@ -39,7 +39,7 @@
 		(sb-ext:run-program
 		 *bourne-compatible-shell*
 		 (list "-c" (format nil "~a > ~a 2> ~a"
-				    command 
+				    command
 				    (namestring output)
 				    (namestring error)))
 		 :wait t
@@ -81,6 +81,9 @@
   (sb-ext:process-exit-code process))
 
 (defun %os-process-id ()
+  #+unix
+  (sb-unix:unix-getpid)
+  #-unix
   (error 'unsupported-function-error :function 'os-process-id))
 
 (defun %get-env-var (name)

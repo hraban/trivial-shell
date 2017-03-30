@@ -2,7 +2,7 @@
 
 (defun %shell-command (command input)
   (let* ((process (create-shell-process command t input))
-         (output (file-to-string-as-lines 
+         (output (file-to-string-as-lines
                   (ccl::external-process-output-stream process)))
          (error (file-to-string-as-lines
                  (ccl::external-process-error-stream process))))
@@ -27,7 +27,7 @@
   (nth-value 1 (ccl:external-process-status process)))
 
 (defun %os-process-id ()
-  (error 'unsupported-function-error :function 'os-process-id))
+  (ccl::getpid))
 
 (defun %get-env-var (name)
   (ccl::getenv name))

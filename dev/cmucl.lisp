@@ -9,13 +9,16 @@
          (error (file-to-string-as-lines (ext::process-error process))))
     (close (ext::process-output process))
     (close (ext::process-error process))
-    
+
     (values
      output
      error
      (ext::process-exit-code process))))
 
 (defun %os-process-id ()
+  #+unix
+  (unix:unix-getpid)
+  #-unix
   (error 'unsupported-function-error :function 'os-process-id))
 
 (defun %get-env-var (name)
