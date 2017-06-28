@@ -7,10 +7,7 @@ Alexander Repenning's Apple event code. It was then subjected to bursts
 of gamma radiation and repeated does of the sonic screwdriver.
 |#
 
-(defpackage :trivial-shell-system (:use #:cl #:asdf))
-(in-package :trivial-shell-system)
-
-(defsystem trivial-shell
+(defsystem "trivial-shell"
   :version "0.2.0"
   :author "Gary Warren King <gwking@metabang.com>"
   :maintainer "Gary Warren King <gwking@metabang.com>"
@@ -71,7 +68,7 @@ of gamma radiation and repeated does of the sonic screwdriver.
 
 		 #-(or abcl allegro clisp cmu digitool ecl
 		       lispworks openmcl sbcl scl)
-		 (:file "unsupported")                                     
+		 (:file "unsupported")
 		 #+digitool
 		 (:module "mcl"
 			  :components ((:file "eval-apple-script")))))
@@ -80,16 +77,4 @@ of gamma radiation and repeated does of the sonic screwdriver.
 		:components
 		((:module "source"
 			  :components ((:static-file "index.md"))))))
-  :in-order-to ((test-op (load-op trivial-shell-test)))
-  :perform (test-op :after (op c)
-		    (funcall
-		      (intern (symbol-name '#:run-tests) :lift)
-		      :config :generic))
-  :depends-on ())
-
-(defmethod operation-done-p 
-           ((o test-op)
-            (c (eql (find-system 'trivial-shell))))
-  (values nil))
-
-
+  :in-order-to ((test-op (test-op "trivial-shell-test"))))
